@@ -36,11 +36,11 @@ class DSDTraining(nn.Module):
     def update_masks(self):
         for i, (w, b) in enumerate(self.layers):
             w_abs = torch.abs(w)
-            q_w = np.quantile(w_abs.cpu().numpy(), q=self.sparsity)
+            q_w = np.quantile(w_abs.cpu().detach().numpy(), q=self.sparsity)
             mask_w = torch.where(w_abs < q_w, True, False)
 
             b_abs = torch.abs(b)
-            q_b = np.quantile(b_abs.cpu().numpy(), q=self.sparsity)
+            q_b = np.quantile(b_abs.cpu().detach().numpy(), q=self.sparsity)
             mask_b = torch.where(b_abs < q_b, True, False)
 
             self.masks[i] = (mask_w, mask_b)
