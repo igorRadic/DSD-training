@@ -6,14 +6,17 @@ import torch
 plt.style.use("ggplot")
 
 
-def plot_wb(model, fig_path, ranges=None):
-
+def plot_wb(model, fig_path, ranges=None, only_fc=False):
     tmp = list(model.named_parameters())
     layers = []
     for i in range(0, len(tmp), 2):
         w, b = tmp[i], tmp[i + 1]
-        if "fc" in w[0] or "fc" in b[0]:
-            layers.append((w, b))
+        if only_fc:
+            if "fc" in w[0] or "fc" in b[0]:
+                layers.append((w, b))
+        else:
+            if ("conv" in w[0] or "conv" in b[0]) or ("fc" in w[0] or "fc" in b[0]):
+                layers.append((w, b))
 
     num_rows = len(layers)
 
